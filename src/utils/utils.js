@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2021-01-12 09:40:14
+ * @LastEditTime: 2021-01-28 15:21:10
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \antdPro\src\utils\utils.js
+ */
 import { parse } from 'querystring';
 /* eslint no-useless-escape:0 import/prefer-default-export:0 */
 
@@ -8,7 +16,7 @@ export const isAntDesignPro = () => {
     return true;
   }
 
-  return window.location.hostname === 'preview.pro.ant.design';
+  return window.location.hostname === 'http://10.9.2.6:8080/';
 }; // 给官方演示站点用，用于关闭真实开发环境不需要使用的特性
 
 export const isAntDesignProOrDev = () => {
