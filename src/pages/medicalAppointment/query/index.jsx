@@ -95,6 +95,7 @@ const Query = () => {
           <ReportDetails formState={2} data={data} />
           <Button
             type="primary"
+            style={{ marginLeft: '50%' }}
             onClick={() => {
               setStatus(0);
             }}

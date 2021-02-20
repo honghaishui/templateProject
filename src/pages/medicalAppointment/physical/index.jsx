@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Steps, Button, message, Form } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
@@ -23,11 +23,11 @@ const Physical = (props) => {
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
   const [status, setStatus] = useState(0);
-  const [dataString,setDataString] = useState(null)
+  const [dataString, setDataString] = useState(null);
   const next = () => {
     setCurrent(current + 1);
   };
-  const {fetchAppointmentInsert} = props
+  const { fetchAppointmentInsert } = props;
   const prev = () => {
     setCurrent(current - 1);
   };
@@ -36,7 +36,7 @@ const Physical = (props) => {
   }, []);
   return (
     <>
-      <div style={{ width: 500, height: 300, position: 'relative' }}>
+      <div style={{ width: 500, height: 300, position: 'relative', top: '40%', left: '40%' }}>
         {status === 0 && (
           <div
             style={{
@@ -55,18 +55,21 @@ const Physical = (props) => {
             </Steps>
             <div className="steps-content">
               <Form
+                style={{ margin: '20px 0' }}
                 form={form}
                 onFinish={() => {
-                  console.log('提交了')
-                  const obj = {...form.getFieldsValue(['staffName', 'time'])}
-                  obj.time = moment(form.getFieldsValue(['time']).time).format('YYYY-MM-DD HH:mm:ss')
-                  fetchAppointmentInsert(obj).then(res => {
-                    if(res.code === 200) {
-                      setStatus(1)
+                  console.log('提交了');
+                  const obj = { ...form.getFieldsValue(['staffName', 'time']) };
+                  obj.time = moment(form.getFieldsValue(['time']).time).format(
+                    'YYYY-MM-DD HH:mm:ss',
+                  );
+                  fetchAppointmentInsert(obj).then((res) => {
+                    if (res.code === 200) {
+                      setStatus(1);
                     }
-                    console.log(res)
-                  })
-                  console.log('提交完了')
+                    console.log(res);
+                  });
+                  console.log('提交完了');
                 }}
               >
                 {
@@ -75,7 +78,7 @@ const Physical = (props) => {
                       if (current === 0) {
                         return <FirstForm />;
                       } else if (current === 1) {
-                        return <SecondForm setDataString={setDataString}/>;
+                        return <SecondForm setDataString={setDataString} />;
                       }
                     })()}
                   </>
@@ -117,17 +120,20 @@ const Physical = (props) => {
             </div>
           </div>
         )}
-        {status === 1 && <div style={{ position: 'absolute' }}>预约成功，请按时体检</div>}
+        {status === 1 && (
+          <div style={{ position: 'absolute', fontSize: 16 }}>预约成功，请按时体检</div>
+        )}
       </div>
     </>
   );
 };
 
 const mapStateToProps = ({ physical }) => ({
-  physical
+  physical,
 });
-const mapDispatchToProps = dispatch => ({
-  fetchAppointmentInsert: payload => dispatch({ type: 'physical/fetchAppointmentInsert', payload }),
+const mapDispatchToProps = (dispatch) => ({
+  fetchAppointmentInsert: (payload) =>
+    dispatch({ type: 'physical/fetchAppointmentInsert', payload }),
 });
 
 const decorator = flow(connect(mapStateToProps, mapDispatchToProps));

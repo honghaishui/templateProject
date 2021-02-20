@@ -60,7 +60,7 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
 
     return Exception;
   }
-  return Exception;
+  return target;
   // throw new Error('unsupported parameters');
 };
 
