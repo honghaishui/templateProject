@@ -102,6 +102,7 @@ const BasicLayout = (props) => {
     [location.pathname],
   );
   const { formatMessage } = useIntl();
+  console.log(authorized);
   return (
     <>
       <ProLayout
