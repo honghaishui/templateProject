@@ -1,43 +1,45 @@
 /*
  * @Author: your name
  * @Date: 2021-01-12 09:40:14
- * @LastEditTime: 2021-02-23 16:35:58
+ * @LastEditTime: 2021-02-23 15:55:12
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \antdPro\src\pages\User\register\model.js
  */
 import {
-  fetchReportExportData,
-  fetchRestStaff,
-  fetchReportQueryByName
+  fetcheAppointment,
+  fetchRestAppointment,
+  fetchAppointmentRetreat
 } from './service';
 
 const Model = {
-  namespace: 'employeeList',
+  namespace: 'doctor',
   state: {
     status: undefined,
   },
   effects: {
-    * fetchReportExportData({
+    * fetcheAppointment({
       payload
     }, {
-      call
+      call,
+      put
     }) {
-      return yield call(fetchReportExportData, payload);
+      return yield call(fetcheAppointment, payload);
     },
-    * fetchRestStaff({
+    * fetchAppointmentRetreat({
       payload
     }, {
-      call
+      call,
+      put
     }) {
-      return yield call(fetchRestStaff, payload);
+      return yield call(fetchAppointmentRetreat, payload);
     },
-    * fetchReportQueryByName({
+    * fetchRestAppointment({
       payload
     }, {
       call
     }) {
-      return yield call(fetchReportQueryByName, payload);
+      return yield call(fetchRestAppointment, payload);
     },
   },
   reducers: {

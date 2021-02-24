@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-01-12 09:40:14
- * @LastEditTime: 2021-01-22 15:27:13
+ * @LastEditTime: 2021-02-23 18:16:38
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \antdPro\src\pages\User\register\service.js
@@ -14,4 +14,3 @@ export async function fetchUpdatePassword(params) {
     data: params,
   });
 }
-

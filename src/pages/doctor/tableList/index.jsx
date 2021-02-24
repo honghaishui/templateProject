@@ -7,17 +7,36 @@ import ReportDetails from '../../coponments/reportDetails';
 const TableList = (props) => {
   const [modelVisible, setModelVisible] = useState(false);
   const [formState, setFormState] = useState(1);
+  const [id, setId] = useState(null);
   const [staffName, setStaffName] = useState(null);
   const [staffAge, setStaffAge] = useState(null);
   const [staffSex, setStaffSex] = useState(null);
   const [dpartId, setDpartId] = useState(null);
+  const [createTime, setCreateTime] = useState(null);
+  const [bodyFatContent, setBodyFatContent] = useState(null);
+  const [heartAndLung, setHeartAndLung] = useState(null);
+  const [proposal, setProposal] = useState(null);
+  const [vision, setVision] = useState(null);
+  const [weight, setWeight] = useState(null);
+  const [data, setData] = useState([]);
   const dataReport = {
     staffName,
     staffAge,
     staffSex,
     dpartId,
+    createTime,
+    bodyFatContent,
+    heartAndLung,
+    proposal,
+    vision,
+    weight,
   };
-  const {fetchReportInsert,fetchReportUpdate} = props;
+  const { fetchReportInsert, fetchReportUpdate, fetcheReportList } = props;
+  useEffect(() => {
+    fetcheReportList().then((res) => {
+      setData(res?.data);
+    });
+  }, []);
   const columns = [
     {
       title: '姓名',
@@ -51,6 +70,12 @@ const TableList = (props) => {
               setStaffAge(record.staffAge);
               setStaffSex(record.staffSex);
               setDpartId(record.dpartId);
+              setBodyFatContent(record.bodyFatContent);
+              setHeartAndLung(record.heartAndLung);
+              setProposal(record.proposal);
+              setVision(record.vision);
+              setWeight(record.weight);
+              setCreateTime(record.createTime);
               setFormState(2);
               setModelVisible(true);
             }}
@@ -63,6 +88,13 @@ const TableList = (props) => {
               setStaffAge(record.staffAge);
               setStaffSex(record.staffSex);
               setDpartId(record.dpartId);
+              setBodyFatContent(record.bodyFatContent);
+              setHeartAndLung(record.heartAndLung);
+              setProposal(record.proposal);
+              setVision(record.vision);
+              setWeight(record.weight);
+              setCreateTime(record.createTime);
+              setId(record.id);
               setFormState(3);
               setModelVisible(true);
             }}
@@ -73,38 +105,23 @@ const TableList = (props) => {
       ),
     },
   ];
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-  const data = [
-    {
-      key: '1',
-      staffName: '张三',
-      staffAge: 32,
-      staffSex: '男',
-      dpartId: '001',
-    },
-    {
-      key: '2',
-      staffName: '李四',
-      staffAge: 32,
-      staffSex: '男',
-      dpartId: '001',
-    },
-    {
-      key: '3',
-      staffName: '王五',
-      staffAge: 32,
-      staffSex: '男',
-      dpartId: '001',
-    },
-  ];
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div style={{ width: '100%', position: 'absolute', top: '8%' }}>
         <Button
           type="primary"
           onClick={() => {
+            setStaffName(null);
+            setStaffAge(null);
+            setStaffSex(null);
+            setDpartId(null);
+            setBodyFatContent(null);
+            setHeartAndLung(null);
+            setProposal(null);
+            setVision(null);
+            setWeight(null);
+            setCreateTime(null);
             setFormState(1);
             setModelVisible(true);
           }}
@@ -132,7 +149,16 @@ const TableList = (props) => {
           footer={null}
           onCancel={() => setModelVisible(false)}
         >
-          <ReportDetails formState={formState} data={dataReport} fetchReportInsert={fetchReportInsert} fetchReportUpdate={fetchReportUpdate}/>
+          <ReportDetails
+            formState={formState}
+            data={dataReport}
+            setData={setData}
+            fetchReportInsert={fetchReportInsert}
+            fetchReportUpdate={fetchReportUpdate}
+            setModelVisible={setModelVisible}
+            fetcheReportList={fetcheReportList}
+            id={id}
+          />
         </Modal>
       </div>
     </div>
@@ -140,14 +166,14 @@ const TableList = (props) => {
 };
 
 const mapStateToProps = ({ tableList }) => ({
-  tableList
+  tableList,
 });
-const mapDispatchToProps = dispatch => ({
-  fetchReportInsert: payload => dispatch({ type: 'tableList/fetchReportInsert', payload }),
-  fetchReportUpdate: payload => dispatch({ type: 'tableList/fetchReportUpdate', payload }),
+const mapDispatchToProps = (dispatch) => ({
+  fetchReportInsert: (payload) => dispatch({ type: 'tableList/fetchReportInsert', payload }),
+  fetchReportUpdate: (payload) => dispatch({ type: 'tableList/fetchReportUpdate', payload }),
+  fetcheReportList: (payload) => dispatch({ type: 'tableList/fetcheReportList', payload }),
 });
 
 const decorator = flow(connect(mapStateToProps, mapDispatchToProps));
 
 export default decorator(TableList);
-

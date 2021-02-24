@@ -22,7 +22,7 @@ const steps = [
 const Physical = (props) => {
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(null);
   const [dataString, setDataString] = useState(null);
   const next = () => {
     setCurrent(current + 1);
@@ -58,7 +58,6 @@ const Physical = (props) => {
                 style={{ margin: '20px 0' }}
                 form={form}
                 onFinish={() => {
-                  console.log('提交了');
                   const obj = { ...form.getFieldsValue(['staffName', 'time']) };
                   obj.time = moment(form.getFieldsValue(['time']).time).format(
                     'YYYY-MM-DD HH:mm:ss',
@@ -66,10 +65,9 @@ const Physical = (props) => {
                   fetchAppointmentInsert(obj).then((res) => {
                     if (res.code === 200) {
                       setStatus(1);
+                      message.success('提交成功');
                     }
-                    console.log(res);
                   });
-                  console.log('提交完了');
                 }}
               >
                 {
@@ -105,8 +103,6 @@ const Physical = (props) => {
                   type="primary"
                   onClick={() => {
                     form.submit();
-                    setStatus(1);
-                    message.success('提交成功');
                   }}
                 >
                   提交

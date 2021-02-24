@@ -1,18 +1,44 @@
 import React from 'react';
-import { Descriptions, Form, Input, Button } from 'antd';
+import { Descriptions, Form, Input, Button, Select } from 'antd';
 
+const { Option } = Select;
 const ReportDetails = (props) => {
-  const { formState, data ,fetchReportInsert,fetchReportUpdate} = props;
+  const {
+    formState,
+    data,
+    id,
+    fetchReportInsert,
+    fetchReportUpdate,
+    setModelVisible,
+    fetcheReportList,
+    setData,
+  } = props;
   return (
     <div>
       <Form
         onFinish={(v) => {
-          formState === 1 && fetchReportInsert(v).then(res => {
-            console.log(res)
-          })
-          formState === 3 && fetchReportUpdate(v).then(res => {
-            console.log(res)
-          })
+          const obj = { id, ...v };
+          delete obj.createTime;
+          obj.staffAge = Number(v.staffAge);
+          obj.dpartId = Number(v.dpartId);
+          formState === 1 &&
+            fetchReportInsert(obj).then((res) => {
+              if (res?.code === 200) {
+                fetcheReportList().then((resp) => {
+                  setData(resp?.data);
+                });
+                setModelVisible(false);
+              }
+            });
+          formState === 3 &&
+            fetchReportUpdate(obj).then((res) => {
+              if (res?.code === 200) {
+                fetcheReportList().then((resp) => {
+                  setData(resp?.data);
+                });
+                setModelVisible(false);
+              }
+            });
         }}
       >
         <Descriptions title="体检报告单" layout="vertical" bordered>
@@ -58,13 +84,19 @@ const ReportDetails = (props) => {
           <Descriptions.Item label="性别">
             {formState === 1 && (
               <Form.Item name="staffSex">
-                <Input></Input>
+                <Select placeholder="请选择性别">
+                  <Option value={1}>男</Option>
+                  <Option value={2}>女</Option>
+                </Select>
               </Form.Item>
             )}
-            {formState === 2 && <span>{data.staffSex}</span>}
+            {formState === 2 && <span>{Number(data.staffSex) === 1 ? '男' : '女'}</span>}
             {formState === 3 && (
               <Form.Item name="staffSex" initialValue={data.staffSex}>
-                <Input></Input>
+                <Select placeholder="请选择性别">
+                  <Option value={1}>男</Option>
+                  <Option value={2}>女</Option>
+                </Select>
               </Form.Item>
             )}
           </Descriptions.Item>
@@ -96,13 +128,13 @@ const ReportDetails = (props) => {
           </Descriptions.Item>
           <Descriptions.Item label="体脂含量">
             {formState === 1 && (
-              <Form.Item name="bodyFat">
+              <Form.Item name="bodyFatContent">
                 <Input></Input>
               </Form.Item>
             )}
-            {formState === 2 && <span>{data.bodyFat}</span>}
+            {formState === 2 && <span>{data.bodyFatContent}</span>}
             {formState === 3 && (
-              <Form.Item name="bodyFat" initialValue={data.bodyFat}>
+              <Form.Item name="bodyFatContent" initialValue={data.bodyFatContent}>
                 <Input></Input>
               </Form.Item>
             )}

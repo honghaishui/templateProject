@@ -64,7 +64,7 @@ const SecurityView = (props) => {
 
     return promise.resolve();
   };
-  const{fetchUpdatePassword}  = props
+  const { fetchUpdatePassword } = props;
   const getPasswordStatus = () => {
     const value = form.getFieldValue('password');
 
@@ -207,20 +207,27 @@ const SecurityView = (props) => {
         visible={modelVisible}
         destroyOnClose
         onOk={() => {
-          form.submit()
+          form.submit();
         }}
         onCancel={() => setModelVisible(false)}
       >
-        <Form form={form} preserve={false} onFinish={(v) => {
-          form.validateFields().then((res) => {
-            if (res) {
-              fetchUpdatePassword(v).then(res => {
-                console.log(res)
-              })
-              setModelVisible(false);
-            }
-          });
-        }}>
+        <Form
+          form={form}
+          preserve={false}
+          onFinish={(v) => {
+            const account = localStorage.getItem('name');
+            const obj = { account, password: v.password };
+            form.validateFields().then((res) => {
+              if (res) {
+                fetchUpdatePassword(obj).then((res) => {
+                  if (res?.code === 200) {
+                    setModelVisible(false);
+                  }
+                });
+              }
+            });
+          }}
+        >
           <Popover
             getPopupContainer={(node) => {
               if (node && node.parentNode) {
@@ -263,7 +270,7 @@ const SecurityView = (props) => {
               rules={[
                 {
                   required: true,
-                  message:'请输入密码',
+                  message: '请输入密码',
                   validator: checkPassword,
                 },
               ]}
@@ -306,10 +313,10 @@ const SecurityView = (props) => {
 };
 
 const mapStateToProps = ({ security }) => ({
-  security
+  security,
 });
-const mapDispatchToProps = dispatch => ({
-  fetchUpdatePassword: payload => dispatch({ type: 'security/fetchUpdatePassword', payload }),
+const mapDispatchToProps = (dispatch) => ({
+  fetchUpdatePassword: (payload) => dispatch({ type: 'security/fetchUpdatePassword', payload }),
 });
 
 const decorator = flow(connect(mapStateToProps, mapDispatchToProps));

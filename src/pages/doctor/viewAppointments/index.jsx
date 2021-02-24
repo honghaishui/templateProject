@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Tag, Radio, Space, Modal, Input } from 'antd';
-
+import { Table, Tag, Radio, Space, Modal, Input, message } from 'antd';
+import { connect } from 'dva';
+import flow from 'lodash/flow';
 // const ViewAppointments = () => {
 //   return <div>查看预约</div>;
 // };
@@ -9,7 +10,14 @@ import { Table, Tag, Radio, Space, Modal, Input } from 'antd';
 // import { Table, Tag, Radio, Space, Modal, Input } from 'antd';
 // import ReportDetails from '../coponments/reportDetails';
 
-const ViewAppointments = () => {
+const ViewAppointments = (props) => {
+  const { fetcheAppointment, fetchRestAppointment, fetchAppointmentRetreat } = props;
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetcheAppointment().then((res) => {
+      setData(res?.data);
+    });
+  }, []);
   const columns = [
     {
       title: '姓名',
@@ -28,9 +36,16 @@ const ViewAppointments = () => {
       render: (text, record) => (
         <Space size="middle">
           <a
-          // onClick={() => {
-
-          // }}
+            onClick={() => {
+              fetchAppointmentRetreat({ id: record.id, stauts: 0 }).then((res) => {
+                message.success('退回成功');
+                if (res?.code === 200) {
+                  fetcheAppointment().then((resp) => {
+                    setData(resp?.data);
+                  });
+                }
+              });
+            }}
           >
             退回
           </a>
@@ -38,29 +53,21 @@ const ViewAppointments = () => {
       ),
     },
   ];
-
-  const data = [
-    {
-      key: '1',
-      staffName: '张三',
-      time: '2021/1/1 12:32:40',
-    },
-    {
-      key: '2',
-      staffName: '李四',
-      time: '2021/1/1 12:32:40',
-    },
-    {
-      key: '3',
-      staffName: '王五',
-      time: '2021/1/1 12:32:40',
-    },
-  ];
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div style={{ width: '100%', position: 'absolute', top: '8%' }}>
         <div style={{ float: 'left' }}>
-          <Input.Search placeholder="input search text" style={{ width: 200 }} />
+          <Input.Search
+            placeholder="请输入员工姓名"
+            style={{ width: 200 }}
+            onSearch={(value) => {
+              fetcheAppointment({ staffName: value }).then((res) => {
+                if (res?.code === 200) {
+                  setData(res?.data);
+                }
+              });
+            }}
+          />
         </div>
       </div>
       <div
@@ -78,4 +85,17 @@ const ViewAppointments = () => {
     </div>
   );
 };
-export default ViewAppointments;
+
+const mapStateToProps = ({ doctor }) => ({
+  doctor,
+});
+const mapDispatchToProps = (dispatch) => ({
+  fetcheAppointment: (payload) => dispatch({ type: 'doctor/fetcheAppointment', payload }),
+  fetchAppointmentRetreat: (payload) =>
+    dispatch({ type: 'doctor/fetchAppointmentRetreat', payload }),
+  fetchRestAppointment: (payload) => dispatch({ type: 'doctor/fetchRestAppointment', payload }),
+});
+
+const decorator = flow(connect(mapStateToProps, mapDispatchToProps));
+
+export default decorator(ViewAppointments);

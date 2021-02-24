@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Result, message } from 'antd';
+import { connect } from 'dva';
+import flow from 'lodash/flow';
 import ReportDetails from '../../coponments/reportDetails';
 
-const Query = () => {
-  const [status, setStatus] = useState(3);
-  const data = {
-    staffName: '张三',
-    dpartId: '007',
-    staffAge: '20',
-    staffSex: '男',
-    vision: '0.5',
-    weight: '60KG',
-    bodyFat: '30%',
-    heartAndLung: '正常',
-    createTime: '2020/12/31',
-    proposal: '多喝热水',
-  };
+const Query = (props) => {
+  const [status, setStatus] = useState(0);
+  const [data, setData] = useState(null);
+  const { fetchReportQueryByName } = props;
+  // const data = {
+  //   staffName: '张三',
+  //   dpartId: '007',
+  //   staffAge: '20',
+  //   staffSex: '男',
+  //   vision: '0.5',
+  //   weight: '60KG',
+  //   bodyFat: '30%',
+  //   heartAndLung: '正常',
+  //   createTime: '2020/12/31',
+  //   proposal: '多喝热水',
+  // };
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       {status === 0 && (
@@ -31,13 +35,19 @@ const Query = () => {
         >
           <Form
             onFinish={(v) => {
-              message
-                .loading('正在查询，请稍后', 1.5)
-                .then(() => message.success('报告生成完毕', 1))
-                .then(() => {
-                  setStatus(3);
-                });
-              console.log(v);
+              fetchReportQueryByName(v).then((res) => {
+                if (res?.data === null) {
+                  setStatus(1);
+                } else {
+                  setData(res?.data);
+                  message
+                    .loading('正在查询，请稍后', 1.5)
+                    .then(() => message.success('报告生成完毕', 1))
+                    .then(() => {
+                      setStatus(3);
+                    });
+                }
+              });
             }}
           >
             <Form.Item
@@ -107,4 +117,13 @@ const Query = () => {
     </div>
   );
 };
-export default Query;
+const mapStateToProps = ({ query }) => ({
+  query,
+});
+const mapDispatchToProps = (dispatch) => ({
+  fetchReportQueryByName: (payload) => dispatch({ type: 'query/fetchReportQueryByName', payload }),
+});
+
+const decorator = flow(connect(mapStateToProps, mapDispatchToProps));
+
+export default decorator(Query);

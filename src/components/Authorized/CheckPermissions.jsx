@@ -14,7 +14,8 @@ import PromiseRender from './PromiseRender';
 const checkPermissions = (authority, currentAuthority, target, Exception) => {
   // 没有判定权限.默认查看所有
   // Retirement authority, return target;
-  if (authority == '1' || authority == '2' || authority == '3' || authority == '4') {
+
+  if (!authority) {
     return target;
   }
   // 数组处理
@@ -60,8 +61,8 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
 
     return Exception;
   }
-  return target;
-  // throw new Error('unsupported parameters');
+  // return Exception;
+  throw new Error('unsupported parameters');
 };
 
 export { checkPermissions };

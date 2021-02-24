@@ -1,8 +1,8 @@
 /*
  * @Author: your name
  * @Date: 2021-01-12 09:40:14
- * @LastEditTime: 2021-01-28 15:20:39
- * @LastEditors: your name
+ * @LastEditTime: 2021-02-24 19:12:46
+ * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \antdPro\config\proxy.js
  */
@@ -18,7 +18,7 @@ export default {
     // /rest/
     '/rest/': {
       // target: 'https://preview.pro.ant.design',
-      target: 'http://10.9.2.6:8080/',
+      target: 'http://localhost:8090/',
       changeOrigin: true,
       pathRewrite: {
         '^': '',
@@ -27,7 +27,7 @@ export default {
   },
   test: {
     '/api/': {
-      target: 'http://10.9.2.6:8080/',
+      target: 'http://localhost:8090/',
       changeOrigin: true,
       pathRewrite: {
         '^': '',

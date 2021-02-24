@@ -33,6 +33,7 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
   const [count, setcount] = useState(0);
   const [visible, setvisible] = useState(false);
   const [prefix, setprefix] = useState('1');
+  const [dpart, setdpart] = useState('10');
   const [popover, setpopover] = useState(false);
   const confirmDirty = false;
   let interval;
@@ -272,7 +273,7 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
         >
           <Select
             size="large"
-            // value={prefix}
+            value={prefix}
             onChange={changePrefix}
             style={{
               width: '100%',
@@ -280,11 +281,37 @@ const Register = ({ submitting, dispatch, userAndregister }) => {
             }}
             placeholder="请选择你的类型"
           >
-          <Option value="1">企业管理员</Option>
-          <Option value="2">系统管理员</Option>
+            <Option value="1">企业管理员</Option>
+            <Option value="2">系统管理员</Option>
             <Option value="3">员工</Option>
             <Option value="4">医生</Option>
-
+          </Select>
+        </FormItem>
+        <FormItem
+          name="dpartId"
+          rules={[
+            {
+              required: true,
+              message: '请选择部门',
+            },
+          ]}
+        >
+          <Select
+            size="large"
+            value={dpart}
+            onChange={(v) => {
+              setdpart(v);
+            }}
+            style={{
+              width: '100%',
+              marginBottom: 20,
+            }}
+            placeholder="请选择部门"
+          >
+            <Option value="10">总裁办公室</Option>
+            <Option value="20">销售部</Option>
+            <Option value="30">事业部</Option>
+            <Option value="40">其他</Option>
           </Select>
         </FormItem>
         {/* <InputGroup compact>

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-01-12 09:40:14
- * @LastEditTime: 2021-01-22 15:10:12
+ * @LastEditTime: 2021-02-23 15:44:08
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \antdPro\src\pages\User\register\service.js
@@ -19,4 +19,8 @@ export async function fetchReportUpdate(params) {
     method: 'POST',
     data: params,
   });
+}
+
+export async function fetcheReportList() {
+  return request('/rest/report/list');
 }

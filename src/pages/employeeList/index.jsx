@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Tag, Radio, Space, Modal, Input,Button } from 'antd';
+import { Table, Tag, Radio, Space, Modal, Input, Button } from 'antd';
 import { connect } from 'dva';
 import flow from 'lodash/flow';
 import ReportDetails from '../coponments/reportDetails';
 
 const EmployeeList = (props) => {
   const [modelVisible, setModelVisible] = useState(false);
-  const [staffName, setStaffName] = useState(null);
-  const [staffAge, setStaffAge] = useState(null);
-  const [staffSex, setStaffSex] = useState(null);
-  const [dpartId, setDpartId] = useState(null);
-  const dataReport = {
-    staffName,
-    staffAge,
-    staffSex,
-    dpartId,
-  };
-  const {fetchReportExportData} = props
+  const [data, setData] = useState([]);
+  const [dataReport, setDataReport] = useState(null);
+  const { fetchRestStaff, fetchReportQueryByName } = props;
+
+  useEffect(() => {
+    fetchRestStaff({}).then((res) => {
+      setData(res?.data?.list);
+    });
+  }, []);
   const columns = [
     {
       title: '姓名',
@@ -46,11 +44,15 @@ const EmployeeList = (props) => {
         <Space size="middle">
           <a
             onClick={() => {
-              setStaffName(record.staffName);
-              setStaffAge(record.staffAge);
-              setStaffSex(record.staffSex);
-              setDpartId(record.dpartId);
-              setModelVisible(true);
+              fetchReportQueryByName({
+                staffName: record.staffName,
+                dpartId: `${record.dpartId}`,
+              }).then((res) => {
+                if (res?.code === 200) {
+                  setDataReport(res?.data);
+                  setModelVisible(true);
+                }
+              });
             }}
           >
             查看
@@ -60,40 +62,46 @@ const EmployeeList = (props) => {
     },
   ];
 
-  const data = [
-    {
-      key: '1',
-      staffName: '张三',
-      staffAge: 32,
-      staffSex: '男',
-      dpartId: '001',
-    },
-    {
-      key: '2',
-      staffName: '李四',
-      staffAge: 32,
-      staffSex: '男',
-      dpartId: '001',
-    },
-    {
-      key: '3',
-      staffName: '王五',
-      staffAge: 32,
-      staffSex: '男',
-      dpartId: '001',
-    },
-  ];
+  // const data = [
+  //   {
+  //     key: '1',
+  //     staffName: '张三',
+  //     staffAge: 32,
+  //     staffSex: '男',
+  //     dpartId: '001',
+  //   },
+  //   {
+  //     key: '2',
+  //     staffName: '李四',
+  //     staffAge: 32,
+  //     staffSex: '男',
+  //     dpartId: '001',
+  //   },
+  //   {
+  //     key: '3',
+  //     staffName: '王五',
+  //     staffAge: 32,
+  //     staffSex: '男',
+  //     dpartId: '001',
+  //   },
+  // ];
   return (
     <div style={{ position: 'relative', width: '100%', height: '100%' }}>
       <div style={{ width: '100%', position: 'absolute', top: '8%' }}>
         <div style={{ float: 'left' }}>
-          <Input.Search placeholder="input search text" style={{ width: 200 }} />
+          <Input.Search
+            placeholder="请输入员工姓名"
+            style={{ width: 200 }}
+            onSearch={(v) => {
+              fetchRestStaff({ staffName: v }).then((res) => {
+                setData(res?.data?.list);
+              });
+            }}
+          />
         </div>
         <div style={{ float: 'right' }}>
-        <Button
-            type="primary"
-            >
-             <a href='http://10.9.2.6:8080//rest/report/exportData'>导出</a>
+          <Button type="primary">
+            <a href="http://localhost:8090//rest/report/exportData">导出</a>
           </Button>
         </div>
       </div>
@@ -126,11 +134,14 @@ const EmployeeList = (props) => {
   );
 };
 
-const mapStateToProps = ({ employeeList }) => ({
-  employeeList
+const mapStateToProps = ({ employeeList, query }) => ({
+  employeeList,
+  query,
 });
-const mapDispatchToProps = dispatch => ({
-  fetchReportExportData: payload => dispatch({ type: 'employeeList/fetchReportExportData', payload }),
+const mapDispatchToProps = (dispatch) => ({
+  fetchRestStaff: (payload) => dispatch({ type: 'employeeList/fetchRestStaff', payload }),
+  fetchReportQueryByName: (payload) =>
+    dispatch({ type: 'employeeList/fetchReportQueryByName', payload }),
 });
 
 const decorator = flow(connect(mapStateToProps, mapDispatchToProps));

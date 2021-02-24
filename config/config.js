@@ -37,7 +37,9 @@ export default defineConfig({
     routes: [{
         path: '/user',
         component: '../layouts/UserLayout',
-        routes: [{
+        routes: [
+
+          {
             path: '/user/login',
             name: 'login',
             component: './User/login',
@@ -70,69 +72,13 @@ export default defineConfig({
         authority: ['1,2,3,4'],
         routes: [{
             path: '/',
-            redirect: '/medicalAppointment',
+            redirect: 'medicalAppointment',
           },
-          // {
-          //   path: '/list',
-          //   icon: 'table',
-          //   name: 'list',
-          //   routes: [{
-          //       path: '/list/search',
-          //       name: 'search-list',
-          //       component: './list/search',
-          //       routes: [{
-          //           path: '/list/search',
-          //           redirect: '/list/search/articles',
-          //         },
-          //         {
-          //           name: 'articles',
-          //           icon: 'smile',
-          //           path: '/list/search/articles',
-          //           component: './list/search/articles',
-          //         },
-          //         {
-          //           name: 'projects',
-          //           icon: 'smile',
-          //           path: '/list/search/projects',
-          //           component: './list/search/projects',
-          //         },
-          //         {
-          //           name: 'applications',
-          //           icon: 'smile',
-          //           path: '/list/search/applications',
-          //           component: './list/search/applications',
-          //         },
-          //       ],
-          //     },
-          //     {
-          //       path: '/',
-          //       redirect: '/list/table-list',
-          //     },
-          //     {
-          //       name: 'table-list',
-          //       icon: 'smile',
-          //       path: '/list/table-list',
-          //       component: './list/table-list',
-          //     },
-          //     {
-          //       name: 'basic-list',
-          //       icon: 'smile',
-          //       path: '/list/basic-list',
-          //       component: './list/basic-list',
-          //     },
-          //     {
-          //       name: 'card-list',
-          //       icon: 'smile',
-          //       path: '/list/card-list',
-          //       component: './list/card-list',
-          //     },
-          //   ],
-          // },
           {
             path: '/medicalAppointment',
             name: '员工中心',
             icon: 'profile',
-            // authority: ['3'],
+            authority: ['3'],
             routes: [{
                 path: '/medicalAppointment',
                 redirect: '/medicalAppointment/physical',
@@ -155,7 +101,7 @@ export default defineConfig({
             path: '/doctor',
             name: '工作台',
             icon: 'profile',
-            // authority: ['4'],
+            authority: ['4'],
             routes: [{
                 path: '/doctor',
                 redirect: '/doctor/tableList',
@@ -178,14 +124,14 @@ export default defineConfig({
             path: '/employeeList',
             name: '员工列表',
             icon: 'profile',
-            // authority: ['1'],
+            authority: ['1'],
             component: './employeeList',
           },
           {
             path: '/userList',
             name: '用户列表',
             icon: 'profile',
-            // authority: ['2'],
+            authority: ['2'],
             component: './userList',
           },
           // {
