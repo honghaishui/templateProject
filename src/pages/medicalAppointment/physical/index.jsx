@@ -22,7 +22,7 @@ const steps = [
 const Physical = (props) => {
   const [current, setCurrent] = useState(0);
   const [form] = Form.useForm();
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState(0);
   const [dataString, setDataString] = useState(null);
   const next = () => {
     setCurrent(current + 1);
@@ -72,13 +72,9 @@ const Physical = (props) => {
               >
                 {
                   <>
-                    {(() => {
-                      if (current === 0) {
-                        return <FirstForm />;
-                      } else if (current === 1) {
-                        return <SecondForm setDataString={setDataString} />;
-                      }
-                    })()}
+                    {
+                      current === 0 ? <FirstForm /> : <SecondForm setDataString={setDataString} />
+                    }
                   </>
                 }
               </Form>
